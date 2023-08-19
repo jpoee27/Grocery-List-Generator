@@ -56,7 +56,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 //@desc     Logout user
-//route     POST /api/user/logout
+//route     POST /api/users/logout
 //@access   Public
 const logoutUser = asyncHandler(async (req, res) => {
     res.cookie('jwt', '', {
@@ -68,7 +68,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 //@desc     Get user profile
-//route     GET /api/user/profile
+//route     GET /api/users/profile
 //@access   Private
 const getUserProfile = asyncHandler(async (req, res) => {
     const user = {
@@ -81,7 +81,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 //@desc     Update user profile
-//route     PUT /api/user/profile
+//route     PUT /api/users/profile
 //@access   Private
 const updateUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);

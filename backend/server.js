@@ -29,5 +29,5 @@ app.listen(port, () => console.log(`Server started on ${port}`));
 
 //TIME STAMP ON TRAVERSY MEDIA MERN CRASH COURSE 
 //1:28:15
-//Backend functionality for user routes are all working now. Next need to set up list routes, controller, and model. Not sure if I will need anything else for the list routes at this point, but start getting these set up before moving onto anything in the frontend. Probably should start with listModel or listRoutes first.
-//REMEMBER TO COMMIT ANY CHANGES TO GIT ALONG THE WAY 
+//Got createItem and getItems functions working properly in the houseItemController. Now starting to work on the updateItem function. The uncommented code in this function finds the item when the itemId is entered into the req.body, but need to figure out how the commented code in this function works in the userController function to find the best way to do it in the houseItemController. Should probably rewatch this part of the tutorial.
+//REMEMBER TO COMMIT ANY FINAL CHANGES TO GIT ALONG THE WAY 

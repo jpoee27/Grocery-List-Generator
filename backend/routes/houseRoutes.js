@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import { 
     createItem,
-    getItem,
+    getItems,
     updateItem,
     deleteItem
 } from '../controllers/houseController.js';
@@ -10,7 +10,7 @@ import { protect } from '../middleware/authMiddleware.js';
 
 router.route('/')
     .post(protect, createItem)
-    .get(protect, getItem)
+    .get(protect, getItems)
     .put(protect, updateItem)
     .delete(protect, deleteItem);
 
