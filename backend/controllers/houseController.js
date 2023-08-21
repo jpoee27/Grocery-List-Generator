@@ -52,43 +52,50 @@ const getItems = asyncHandler(async (req, res) => {
 });
 
 //@desc     Update House Item
-//route     PUT /api/house
+//route     PUT /api/house/:_id
 //@access   Private
+//NOTE: this is working by sending the itemId through a path variable in request parameters. Going to need to figure out to how to send these requests through the frontend once created
 const updateItem = asyncHandler(async (req, res) => {
     const user = req.user._id;
-    const itemId = req.body._id;
+    const itemId = req.params._id;
 
-    const item = await HouseItem.find({ user: user, _id: itemId });
+    const item = await HouseItem.findOne({ user: user, _id: itemId });
 
-    res.status(200).json(item);
-    //GOT EVERYTHING ABOVE THIS WORKING TO FIND THE SPECIFIC ITEM NEEDED TO UPDATE BY PUTTING THE ITEM ID INTO THE REQ.BODY AND USING THE MONGOOSE FIND METHOD. NOW NEED TO FIGURE OUT HOW THE CODE BELOW WORKS IN THE USERCONTROLLER TO FIGURE OUT WHAT IS NEEDED FOR THIS UPDATEITEM FUNCTION. SHOULD PROBABLY REWATCH THIS PART IN THE TUTORIAL
+    if (item) {
+        item.name = req.body.name || item.name;
+        item.category = req.body.category || item.category;
+        item.favorite = req.body.favorite || item.favorite;
 
-    // if (user) {
-    //     user.name = req.body.name || user.name;
-    //     user.email = req.body.email || user.email;
+        const updatedItem = await item.save();
 
-    //     if (req.body.password) {
-    //         user.password = req.body.password;
-    //     }
-
-    //     const updatedUser = await user.save();
-
-    //     res.status(200).json({
-    //         _id: updatedUser._id,
-    //         name: updatedUser.name,
-    //         email: updatedUser.email,
-    //     })
-    // } else {
-    //     res.status(404);
-    //     throw new Error('User not found');
-    // }
+        res.status(200).json({
+            _id: updatedItem._id,
+            name: updatedItem.name,
+            category: updatedItem.category,
+            favorite: updatedItem.favorite,
+        })
+    } else {
+        res.status(404);
+        throw new Error('Item not found');
+    }
 });
 
 //@desc     Delete House Item
-//route     DELETE /api/house
+//route     DELETE /api/house/:_id
 //@access   Private
+//NOTE: this is working by sending the itemId through a path variable in request parameters. Going to need to figure out to how to send these requests through the frontend once created
 const deleteItem = asyncHandler(async (req, res) => {
-    res.status(200).json({message: "House Item Deleted"});
+    const user = req.user._id;
+    const itemId = req.params._id;
+    
+    const deletedItem = await HouseItem.findOneAndDelete({ user: user, _id: itemId });
+
+    if (deletedItem) {
+        res.status(200).json(deletedItem);
+    } else {
+        res.status(404);
+        throw new Error('Item not found');
+    }
 });
 
 export { 

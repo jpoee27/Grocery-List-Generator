@@ -29,5 +29,5 @@ app.listen(port, () => console.log(`Server started on ${port}`));
 
 //TIME STAMP ON TRAVERSY MEDIA MERN CRASH COURSE 
 //1:28:15
-//Got createItem and getItems functions working properly in the houseItemController. Now starting to work on the updateItem function. The uncommented code in this function finds the item when the itemId is entered into the req.body, but need to figure out how the commented code in this function works in the userController function to find the best way to do it in the houseItemController. Should probably rewatch this part of the tutorial.
+//All of my houseRoutes are now working properly. Even got the update and delete routes working to send the _id as a path parameter through the request instead of through the request body. Next need to create the groceryModel, groceryRoutes, and groceryController. The functionality here should basically be the exact same as all of the house files beside changing everything from house to grocery. 
 //REMEMBER TO COMMIT ANY FINAL CHANGES TO GIT ALONG THE WAY 
