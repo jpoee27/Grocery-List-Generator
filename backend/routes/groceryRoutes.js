@@ -6,7 +6,7 @@ import {
     updateItem,
     deleteItem,
     swapItem
-} from '../controllers/houseController.js';
+} from '../controllers/groceryController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 router.route('/')

@@ -1,22 +1,22 @@
 import asyncHandler from 'express-async-handler';
-import HouseItem from '../models/houseItemModel.js';
 import GroceryItem from '../models/groceryItemModel.js';
+import HouseItem from '../models/houseItemModel.js';
 
-//@desc     Create New House Item
-//route     POST /api/house
+//@desc     Create New Grocery Item
+//route     POST /api/grocery
 //@access   Private
 const createItem = asyncHandler(async (req, res) => {
     const { name, category, favorite } = req.body;
     const user = req.user._id;
 
-    const itemExists = await HouseItem.findOne({ user: user, name: name });
+    const itemExists = await GroceryItem.findOne({ user: user, name: name });
 
     if (itemExists) {
         res.status(400);
         throw new Error('Item already exists');
     }
 
-    const item = await HouseItem.create({
+    const item = await GroceryItem.create({
         name,
         category,
         favorite,
@@ -36,31 +36,31 @@ const createItem = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc     Get All House Items For The User Logged In
-//route     GET /api/house
+//@desc     Get All Grocery Items For The User Logged In
+//route     GET /api/grocery
 //@access   Private
 const getItems = asyncHandler(async (req, res) => {
     const user = req.user._id;
 
-    const userItems = await HouseItem.find({ user: user });
+    const userItems = await GroceryItem.find({ user: user });
 
     if (userItems.length === 0) {
         res.status(400);
-        throw new Error("User does not have any house items");
+        throw new Error("User does not have any grocery items");
     } else {
         res.status(200).json(userItems);
     }
 });
 
-//@desc     Update House Item
-//route     PUT /api/house/:_id
+//@desc     Update Grocery Item
+//route     PUT /api/grocery/:_id
 //@access   Private
 //NOTE: this is working by sending the itemId through a path variable in request parameters. Going to need to figure out to how to send these requests through the frontend once created
 const updateItem = asyncHandler(async (req, res) => {
     const user = req.user._id;
     const itemId = req.params._id;
 
-    const item = await HouseItem.findOne({ user: user, _id: itemId });
+    const item = await GroceryItem.findOne({ user: user, _id: itemId });
 
     if (item) {
         item.name = req.body.name || item.name;
@@ -81,15 +81,15 @@ const updateItem = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc     Delete House Item
-//route     DELETE /api/house/:_id
+//@desc     Delete Grocery Item
+//route     DELETE /api/grocery/:_id
 //@access   Private
 //NOTE: this is working by sending the itemId through a path variable in request parameters. Going to need to figure out to how to send these requests through the frontend once created
 const deleteItem = asyncHandler(async (req, res) => {
     const user = req.user._id;
     const itemId = req.params._id;
     
-    const deletedItem = await HouseItem.findOneAndDelete({ user: user, _id: itemId });
+    const deletedItem = await GroceryItem.findOneAndDelete({ user: user, _id: itemId });
 
     if (deletedItem) {
         res.status(200).json(deletedItem);
@@ -99,37 +99,37 @@ const deleteItem = asyncHandler(async (req, res) => {
     }
 });
 
-//@desc     Swap House Item To A Grocery Item
-//route     POST /api/house/:_id/swap
+//@desc     Swap Grocery Item To A House Item
+//route     POST /api/grocery/:_id/swap
 //@access   Private
 //NOTE: this is working by sending the itemId through a path variable in request parameters. Going to need to figure out to how to send these requests through the frontend once created
 const swapItem = asyncHandler(async (req, res) => {
     const user = req.user._id;
     const itemId = req.params._id;
     
-    const item = await HouseItem.findOne({ user: user, _id: itemId });
-    const groceryItemExists = await GroceryItem.findOne({ user: user, name: item.name});
+    const item = await GroceryItem.findOne({ user: user, _id: itemId });
+    const houseItemExists = await HouseItem.findOne({ user: user, name: item.name});
 
     if (!item) {
         res.status(404);
         throw new Error('Item not found');
     }
 
-    if (groceryItemExists) {
+    if (houseItemExists) {
         res.status(400);
-        throw new Error('Item is already in your grocery list');
+        throw new Error('Item is already in your house list');
     }
 
-    const newGroceryItem = await GroceryItem.create({
+    const newHouseItem = await HouseItem.create({
         name: item.name,
         category: item.category,
         favorite: item.favorite,
         user: item.user
     });
 
-    await HouseItem.findOneAndDelete({ user: user, _id: itemId });
+    await GroceryItem.findOneAndDelete({ user: user, _id: itemId });
 
-    res.status(201).json(newGroceryItem);
+    res.status(201).json(newHouseItem);
 });
 
 export { 
